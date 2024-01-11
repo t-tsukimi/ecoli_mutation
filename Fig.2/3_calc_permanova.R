@@ -15,12 +15,15 @@ for (i in 1:nrow(dt)) {
 }
 dt$CMF_AIN <- factor(dt$CMF_AIN, levels = c("CMF", "AIN"))
 
+
 # select target data -----------------------------------------------------
 targetData <- dt %>% dplyr::filter(Day == 14, content == "feces", 
                                    group %in% c("vs_2_araC", "vs_3_araCmalI", "vs_2_malI"))
 metaboNum <- ncol(targetData) -5
 detected_column <-  c(colSums(targetData[, 1:metaboNum]) != 0, rep(F, 5))
 
+
+# performed permanova -----------------------------------------------------
 scaledData <- scale(targetData[, detected_column], scale = T)
 test_result <- adonis(scaledData ~ group, data = targetData, method='eu')
 test_result
